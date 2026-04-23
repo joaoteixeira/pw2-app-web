@@ -43,6 +43,7 @@
                                 <th>Preço</th>
                                 <th>Ativo</th>
                                 <th>Criado em</th>
+                                <th>Ações</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -64,6 +65,11 @@
                                         <% } %>
                                     </td>
                                     <td><%= dateFormat(produtos[index].criadoEm) %></td>
+                                    <td>
+                                        <a href="/produtos/<%= produtos[index].id %>/editar" class="text-warning mr-1">
+                                            <i class="fa fa-pencil fa-lg"></i>
+                                        </a>
+                                    </td>
                                 </tr>
                             <% } %>
 
