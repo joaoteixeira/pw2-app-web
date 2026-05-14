@@ -1,5 +1,8 @@
 import { Body, Controller, Get, Post, Redirect, Render, Param, HttpCode } from "@nestjs/common";
 import { ProdutoService } from "./produto.service";
+import { ValidationView, toBoolean } from 'nest-validation-view';
+import { CreateProdutoDto } from "./dtos/create-produto.dto";
+import { UpdateProdutoDto } from "./dtos/update-produto.dto";
 
 @Controller('produtos')
 export class ProdutoController {
@@ -27,7 +30,13 @@ export class ProdutoController {
 
     @Post('criar')
     @Redirect('/produtos')
-    async formularioCriarSalvar(@Body() dados: any): Promise<void> {
+    @ValidationView('produto/formulario', ({ request, errors }) => ({
+        produto: {
+          ...request.body
+        },
+        errors,
+      }))
+    async formularioCriarSalvar(@Body() dados: CreateProdutoDto): Promise<void> {
         await this.produtoService.create(dados);
     }
 
@@ -49,7 +58,14 @@ export class ProdutoController {
 
     @Post(':id/editar')
     @Redirect('/produtos')
-    async formEditarSalvar(@Param('id') id: number, @Body() dados: any): Promise<void>{
+    @ValidationView('produto/formulario', ({ request, errors }) => ({
+        produto: {
+          id: request.params.id,
+          ...request.body
+        },
+        errors,
+      }))
+    async formEditarSalvar(@Param('id') id: number, @Body() dados: UpdateProdutoDto): Promise<void>{
         await this.produtoService.update(id, dados);
     }
 
